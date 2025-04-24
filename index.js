@@ -1,21 +1,15 @@
-const http = require("http");
-const port = 3000;
+const express = require("express");
+const productRoutes = require("./product.routes");
+const { logRequest } = require("./middleware");
+const { errorResponder } = require("./error.middleware");
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/html" });
+const app = express();
+const PORT = 3000;
 
-  const url = req.url;
-  if (url === "/about") {
-    res.write("<h1>About Us Page</h1>");
-  } else if (url === "/contact") {
-    res.write("<h1>Contact Us Page</h1>");
-  } else {
-    res.write("<h1>Hello World!</h1>");
-    res.write("<h2>My name Maks</h2>");
-  }
-  res.end();
-});
+app.use(logRequest);
+app.use(productRoutes);
+app.use(errorResponder);
 
-server.listen(port, () => {
-  console.log(`server start at http://localhost:${port}/`);
+app.listen(PORT, () => {
+  console.log(`Server listening at http://localhost:${PORT}`);
 });
